@@ -1,0 +1,17 @@
+{
+  "name": "ChiliCal Book Meeting",
+  "author": {
+    "name": "Chad Allard",
+    "email": "chad@chilipiper.com",
+    "url": "https://chilipiper.com"
+  },
+  "defaultLocale": "en",
+  "private": true,
+  "location": {
+    "support": {
+      "ticket_editor": "assets/iframe.html"
+    }
+  },
+  "version": "1.0.0",
+  "frameworkVersion": "2.0"
+}

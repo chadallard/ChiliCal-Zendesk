@@ -1,0 +1,9 @@
+.ticket-editor-icon {
+  padding: 10px;
+}
+
+#custom-icon {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
