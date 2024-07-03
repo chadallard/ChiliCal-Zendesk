@@ -29,21 +29,28 @@ document.addEventListener('DOMContentLoaded', async function () {
             const domain = metadata.settings?.subdomain || 'apps';
             const baseUrl = `https://${domain}.chilipiper.com/chilical-scheduler`;
 
-            const primaryGuestEmail = mainGuest['ticket.requester']?.email || '';
-            const primaryGuest = `?primaryGuest=${encodeURIComponent(primaryGuestEmail)}`;
+            const primaryGuestEmail = mainGuest['ticket.requester']?.email.trim() || '';
+            const assigneeEmail = assignee['ticket.assignee']?.user?.email.trim() || '';
 
-            let guests = '&guests=';
+            let guestsSet = new Set();
             if (collaborators && collaborators['ticket.collaborators'].length > 0) {
-                const collaboratorEmails = collaborators['ticket.collaborators']
-                    .map(collaborator => collaborator.email.trim())
-                    .join(',');
-                guests += `${encodeURIComponent(collaboratorEmails)},`;
+                collaborators['ticket.collaborators'].forEach(collaborator => {
+                    const email = collaborator.email.trim();
+                    if (email !== primaryGuestEmail) {
+                        guestsSet.add(email);
+                    }
+                });
             }
 
-            if (assignee && assignee['ticket.assignee']?.user?.email) {
-                guests += encodeURIComponent(assignee['ticket.assignee'].user.email);
+            if (assigneeEmail && assigneeEmail !== primaryGuestEmail) {
+                guestsSet.add(assigneeEmail);
+            } else {
+                guestsSet.delete(assigneeEmail);
             }
 
+            const guests = guestsSet.size > 0 ? `&guests=${encodeURIComponent(Array.from(guestsSet).join(','))}` : '';
+
+            const primaryGuest = `?primaryGuest=${encodeURIComponent(primaryGuestEmail)}`;
             const queryParams = (event.target.id === 'suggest' || event.target.id === 'suggest_div') ? '&isSuggestedTimes=true' : '';
 
             const fullUrl = baseUrl + primaryGuest + guests + queryParams;
