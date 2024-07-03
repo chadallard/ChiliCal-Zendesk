@@ -1,65 +1,66 @@
 import { formatDateTime } from './utils.js';
 
 export function buildTable(slots, duration, userSlug, attemptId, meetingTypeSlug, timezone) {
-  // Prepare meeting details information
-  let meetingDetails = `
+  const meetingDetails = `
     <div style="margin-bottom: 10px;">
       <div>Meeting length: ${duration} Minutes</div>
       <div>Time Zone: ${timezone}</div>
     </div>
   `;
 
-  // Initialize columns and rows
-  let dates = new Set(slots.map(slot => formatDateTime(slot.start, timezone, 'date')));
-  let columns = Array.from(dates).sort(); // Sort dates in ascending order
+  const dates = Array.from(new Set(slots.map(slot => formatDateTime(slot.start, timezone, 'date')))).sort();
 
-  let table = '<div><table style="border:none;border-collapse: collapse;">';
-  
-  // Build table header with dates as column headers
-  table += '<thead><tr>';
-  columns.forEach(date => {
-    table += `<th style="border: 1px solid #b3b3b3; padding: 4px;">${date}</th>`;
-  });
-  table += '</tr></thead>';
-
-  // Build table body with times as rows under each date column
-  table += '<tbody>';
-  let timesMap = new Map();
-  slots.forEach(slot => {
-    let date = formatDateTime(slot.start, timezone, 'date');
-    if (!timesMap.has(date)) {
-      timesMap.set(date, []);
+  const timesMap = slots.reduce((acc, slot) => {
+    const date = formatDateTime(slot.start, timezone, 'date');
+    if (!acc[date]) {
+      acc[date] = [];
     }
-    timesMap.get(date).push(slot);
-  });
+    acc[date].push(slot);
+    return acc;
+  }, {});
 
-  // Get array of times per date
-  let timesPerDate = Array.from(timesMap.values());
+  const tableHeader = `
+    <thead>
+      <tr>
+        ${dates.map(date => `<th style="border: 1px solid #b3b3b3; padding: 4px;">${date}</th>`).join('')}
+      </tr>
+    </thead>
+  `;
 
-  // Iterate over each time slot
-  let maxTimeSlots = Math.max(...timesPerDate.map(dateSlots => dateSlots.length));
-  for (let i = 0; i < maxTimeSlots; i++) {
-    table += '<tr>';
-    // First column with time slot
-    timesPerDate.forEach((timeSlots, idx) => {
-      if (timeSlots[i]) {
-        let startTime = formatDateTime(timeSlots[i].start, timezone, 'time');
-        let suggestedTimesLink = `https://calendar.chilipiper.com/suggested-times/${attemptId}?slotStartsAt=${timeSlots[i].start}`;
-        table += `<td style="border: 1px solid #b3b3b3; padding: 4px;"><a href="${suggestedTimesLink}" target="_blank">${startTime}</a></td>`;
-      } else {
-        table += '<td style="border: 1px solid #b3b3b3; padding: 4px;"></td>';
-      }
-    });
-    table += '</tr>';
-  }
+  const maxTimeSlots = Math.max(...Object.values(timesMap).map(dateSlots => dateSlots.length));
+  const tableBody = Array.from({ length: maxTimeSlots }).map((_, rowIndex) => `
+    <tr>
+      ${dates.map(date => {
+    const slot = timesMap[date][rowIndex];
+    if (slot) {
+      const startTime = formatDateTime(slot.start, timezone, 'time');
+      const suggestedTimesLink = `https://calendar.chilipiper.com/suggested-times/${attemptId}?slotStartsAt=${slot.start}`;
+      return `<td style="border: 1px solid #b3b3b3; padding: 4px;"><a href="${suggestedTimesLink}" target="_blank">${startTime}</a></td>`;
+    } else {
+      return '<td style="border: 1px solid #b3b3b3; padding: 4px;"></td>';
+    }
+  }).join('')}
+    </tr>
+  `).join('');
 
-  table += '</tbody></table></div>';
+  const table = `
+    <div>
+      <table style="border:none;border-collapse: collapse;">
+        ${tableHeader}
+        <tbody>
+          ${tableBody}
+        </tbody>
+      </table>
+    </div>
+  `;
 
-  // Prepare full calendar link
-  let fullCalendarLink = `https://calendar.chilipiper.com/me/${userSlug}/${meetingTypeSlug}?attemptId=${attemptId}`;
-  let fullCalendarButton = `<div style="margin-top: 10px;">Don't see a time that works? <a href="${fullCalendarLink}" target="_blank">View full calendar</a></div>`;
+  const fullCalendarLink = `https://calendar.chilipiper.com/me/${userSlug}/${meetingTypeSlug}?attemptId=${attemptId}`;
+  const fullCalendarButton = `
+    <div style="margin-top: 10px;">
+      Don't see a time that works? <a href="${fullCalendarLink}" target="_blank">View full calendar</a>
+    </div>
+  `;
 
-  // Return the entire HTML structure
   return `
     ${meetingDetails}
     ${table}
