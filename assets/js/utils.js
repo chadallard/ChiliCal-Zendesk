@@ -25,16 +25,3 @@ export function formatDateTime(dateTime, timezone, type) {
     });
   }
 }
-
-export async function getFocus() {
-  if (!document.hasFocus()) {
-      await new Promise((resolve) => {
-          const interval = setInterval(() => {
-              if (document.hasFocus()) {
-                  clearInterval(interval);
-                  resolve();
-              }
-          }, 100);
-      });
-  }
-}
