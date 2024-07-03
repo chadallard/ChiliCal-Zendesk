@@ -1,8 +1,44 @@
+import { buildTable } from './bookTime.js';
+import { getFocus } from './utils.js';
+
+// create function to repeatedly get focus for document
+
+
 document.addEventListener('DOMContentLoaded', async function () {
     const client = window.ZAFClient.init();
 
-    // Resize pane (optional)
-    client.invoke('resize', { width: '220px', height: '90px' });
+    window.addEventListener('message', async function (event) {
+
+        if (event.data.type === "CHILIPIPER_COPY_TIMES_TO_CLIPBOARD") {
+            try {
+
+                await getFocus();
+
+                const data = event.data.props;
+
+                const slots = data.slots;
+                const duration = data.duration;
+                const userSlug = data.userSlug;
+                const attemptId = data.attemptId;
+                const meetingTypeSlug = data.meetingTypeSlug;
+                const timezone = data.timezone;
+
+                const tableHTML = buildTable(slots, duration, userSlug, attemptId, meetingTypeSlug, timezone);
+                console.log(tableHTML)
+
+                await window.navigator.clipboard.write([
+                    new ClipboardItem({
+                        'text/html': new Blob([tableHTML], { type: 'text/html' })
+                    })
+                ]);
+            } catch (e) {
+                console.error(e)
+            }
+            const data = event.data.props;
+        }
+    });
+
+    client.invoke('resize', { width: '210px', height: '90px' });
 
     async function openPopup(event) {
         try {
@@ -31,7 +67,6 @@ document.addEventListener('DOMContentLoaded', async function () {
 
             // Determine query parameters based on button clicked
             let queryParams = '';
-            console.log(event)
             if (event.target.id === 'suggest' || event.target.id === 'suggest_div') {
                 queryParams = '&isSuggestedTimes=true&isCopyToClipboard=true';
             }
@@ -50,7 +85,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             window.open(fullUrl, 'ChiliCal Scheduler', popupOptions);
 
             // Close the Zendesk app
-            // client.invoke('app.close');
+            client.invoke('app.close');
         } catch (error) {
             console.error('Error in Zendesk app:', error);
         }
