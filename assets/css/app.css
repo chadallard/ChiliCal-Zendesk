@@ -7,3 +7,73 @@
   height: 20px;
   cursor: pointer;
 }
+
+/* Reset default list styles */
+ol, li {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Style for the button container */
+ol {
+  margin-top: 5px;
+}
+
+/* Style for each button */
+ol li button {
+  display: flex;
+  align-items: center;
+  background-color: #151d23; /* Dark background color */
+  color: #fff; /* White text color */
+  border: none;
+  padding: 8px 15px; /* Adjusted padding */
+  border-radius: 6px;
+  cursor: pointer;
+  margin-bottom: 10px;
+  transition: background-color 0.3s ease;
+  max-height: 30px; /* Max height for the button */
+  width: 100%; /* Full width */
+  box-sizing: border-box; /* Ensure padding doesn't affect width */
+}
+
+/* Hover effect */
+ol li button:hover {
+  background-color: #2c3338; /* Darker hover color */
+}
+
+/* Style for SVG icons */
+ol li button svg {
+  width: 24px;
+  height: 24px;
+  margin-right: 10px; /* Space between icon and text */
+}
+
+/* Style for the text and secondary content */
+ol li button div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 1;
+}
+
+/* Hide numbers in ordered list */
+ol li {
+  counter-reset: item;
+}
+
+ol li::before {
+  content: none; /* Hide numbers */
+}
+
+.body{
+  background-color: #151d23;
+  overflow: hidden;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  ol li button {
+    padding: 6px 12px; /* Adjusted padding for smaller screens */
+  }
+}

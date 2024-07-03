@@ -1,8 +1,8 @@
 {
   "app": {
-    "name": "Zen Tunes",
-    "short_description": "Play the famous zen tunes in your help desk.",
-    "long_description": "Play the famous zen tunes in your help desk and \n listen to the beats it has to offer.",
-    "installation_instructions": "Simply click install."
+    "name": "ChiliCal Book Meeting",
+    "short_description": "Book a meeting with your colleagues in a jiffy.",
+    "long_description": "ChiliCal Book Meeting is a simple app that allows you to book a meeting with your colleagues through Chili Piper.",
+    "installation_instructions": "You need to have a Chili Piper account, then, simply click install."
   }
 }
