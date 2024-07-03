@@ -2,6 +2,10 @@
 
 This Zendesk app adds a Chili Piper ChiliCal "book meeting" button to the ticket editor icons. The button allows agents to easily schedule meetings using Chili Piper's ChiliCal Scheduler directly from within Zendesk with all ticket attendees such as requester, assignee, and collaborators. 
 
+## Disclaimer
+
+This is an **unofficial** Chili Piper app, provided as-is. Technical issues experienced with this app are not supported by Chili Piper. 
+
 ## Features
 
 - Adds a Chili Piper "ChiliCal Book Meeting" button to the Zendesk ticket editor.
