@@ -12,6 +12,16 @@
       "ticket_editor": "assets/iframe.html"
     }
   },
+  "parameters":[
+    {
+      "name": "subdomain",
+      "type": "text",
+      "required": true,
+      "secure": false,
+      "description": "Your Chili Piper account subdomain",
+      "default": "apps"
+    }
+  ],
   "version": "1.0.0",
   "frameworkVersion": "2.0"
 }
