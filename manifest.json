@@ -19,7 +19,7 @@
       "required": true,
       "secure": false,
       "description": "Your Chili Piper account subdomain",
-      "default": "apps"
+      "default": "calendar"
     }
   ],
   "version": "1.0.0",
