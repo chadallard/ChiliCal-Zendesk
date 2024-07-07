@@ -16,7 +16,7 @@ This is an **unofficial** Chili Piper app, provided as-is. Technical issues expe
 
 1. Clone the repository:
     ```sh
-    git clone https://github.com/yourusername/chili-piper-chilical-zendesk-app.git
+    git clone https://github.com/chadallard/ChiliCal-Zendesk.git
     ```
 
 2. Navigate to the app directory:
